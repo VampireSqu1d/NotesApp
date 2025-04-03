@@ -1,8 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://cf8vxgwibhecj"]
+[gd_scene load_steps=19 format=3 uid="uid://cf8vxgwibhecj"]
 
 [ext_resource type="Script" uid="uid://cwspeolie4bw" path="res://Scripts/control.gd" id="1_jjgbg"]
 [ext_resource type="Shader" uid="uid://wutyuh5dw3hw" path="res://Shaders/Crt_monitor.gdshader" id="2_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://bk0jv1s5hv3m7" path="res://assets/plus.png" id="2_hptm8"]
 [ext_resource type="Script" uid="uid://dbap0gqox0ty1" path="res://addons/markdownlabel/markdownlabel.gd" id="2_ynf5e"]
+[ext_resource type="PackedScene" uid="uid://kwxyu2pheane" path="res://Scenes/note_editor.tscn" id="3_d1ilt"]
 [ext_resource type="Script" uid="uid://dcx7crs23nf4" path="res://addons/markdownlabel/header_formats/h1_format.gd" id="3_hptm8"]
 [ext_resource type="Script" uid="uid://d0sin64i4v3op" path="res://addons/markdownlabel/header_formats/h2_format.gd" id="4_d1ilt"]
 [ext_resource type="Script" uid="uid://dlok0dv1tq2bf" path="res://addons/markdownlabel/header_formats/h3_format.gd" id="5_6iyac"]
@@ -135,11 +137,12 @@ layout_mode = 2
 [node name="MenuBar" type="MenuBar" parent="Main/MarginContainer/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+prefer_global_menu = false
 
 [node name="File" type="PopupMenu" parent="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar"]
 unique_name_in_owner = true
 size = Vector2i(136, 100)
-prefer_native_menu = true
+hide_on_checkable_item_selection = false
 item_count = 2
 item_0/text = "New Note"
 item_0/id = 0
@@ -148,17 +151,16 @@ item_1/id = 1
 
 [node name="Edit" type="PopupMenu" parent="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar"]
 unique_name_in_owner = true
-prefer_native_menu = true
+hide_on_checkable_item_selection = false
 
 [node name="View" type="PopupMenu" parent="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar"]
 unique_name_in_owner = true
 size = Vector2i(265, 286)
-hide_on_item_selection = false
 hide_on_checkable_item_selection = false
-prefer_native_menu = true
 item_count = 12
 item_0/text = "Toggle TV Overlay"
 item_0/checkable = 1
+item_0/checked = true
 item_0/id = 11
 item_1/text = "Toggle Side Bar"
 item_1/checkable = 1
@@ -200,7 +202,8 @@ item_11/id = 4
 [node name="About" type="PopupMenu" parent="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar"]
 unique_name_in_owner = true
 auto_translate_mode = 1
-prefer_native_menu = true
+hide_on_item_selection = false
+hide_on_checkable_item_selection = false
 item_count = 1
 item_0/text = "About The Project"
 item_0/id = 0
@@ -220,44 +223,44 @@ layout_mode = 2
 [node name="Tree" type="Tree" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/SidebarContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+allow_search = false
 hide_root = true
 
 [node name="HSplitContainer2" type="HSplitContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer"]
 layout_mode = 2
 
-[node name="EditorContainer" type="TabContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="EditorTabBar" type="TabBar" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+clip_tabs = false
+tab_close_display_policy = 2
+max_tab_width = 200
+drag_to_rearrange_enabled = true
+
+[node name="NewTabButton" type="Button" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_hptm8")
+flat = true
+
+[node name="EditorContainer" type="PanelContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 0
+size_flags_vertical = 3
 
-[node name="CodeEdit" type="CodeEdit" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/EditorContainer"]
+[node name="CodeEdit" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/VBoxContainer/EditorContainer" instance=ExtResource("3_d1ilt")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "# THIS IS HEADER TEXT
-this is a note taking app:
-- this is some list item
-- this is another item
-- this is item number 3
-[this is a website link to youtube](youtube.com)
-
-## BOTTOM TEXT"
-placeholder_text = "type your notes here c:"
-wrap_mode = 1
-scroll_smooth = true
-minimap_draw = true
-caret_blink = true
-caret_blink_interval = 0.4
-caret_multiple = false
-highlight_current_line = true
-draw_tabs = true
-gutters_draw_bookmarks = true
-gutters_draw_line_numbers = true
-gutters_zero_pad_line_numbers = true
-auto_brace_completion_enabled = true
-auto_brace_completion_highlight_matching = true
-metadata/_tab_index = 0
+delimiter_strings = Array[String](["' '", "\" \""])
 
 [node name="RendererContainer" type="PanelContainer" parent="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2"]
 unique_name_in_owner = true
@@ -297,7 +300,7 @@ unique_name_in_owner = true
 wait_time = 0.2
 autostart = true
 
+[connection signal="id_pressed" from="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar/File" to="Main" method="_on_file_id_pressed"]
 [connection signal="index_pressed" from="Main/MarginContainer/VBoxContainer/MarginContainer/MenuBar/View" to="Main" method="_on_view_index_pressed"]
 [connection signal="column_title_clicked" from="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/SidebarContainer/Tree" to="Main" method="_on_tree_column_title_clicked"]
 [connection signal="item_edited" from="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/SidebarContainer/Tree" to="Main" method="_on_tree_item_edited"]
-[connection signal="text_changed" from="Main/MarginContainer/VBoxContainer/PanelContainer/HSplitContainer/HSplitContainer2/EditorContainer/CodeEdit" to="Main" method="_on_code_edit_text_changed"]

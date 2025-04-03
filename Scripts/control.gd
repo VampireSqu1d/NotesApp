@@ -12,11 +12,16 @@ extends Control
 @onready var note_renderer: MarkdownLabel = %NoteRenderer
 # containers
 @onready var sidebar_container: PanelContainer = %SidebarContainer
-@onready var editor_container: TabContainer = %EditorContainer
+@onready var editor_container: PanelContainer = %EditorContainer
+@onready var editor_tab_bar: TabBar = %EditorTabBar
+@onready var new_tab_button: Button = %NewTabButton
 @onready var renderer_container: PanelContainer = %RendererContainer
 
 @onready var note_renderer_timer: Timer = %NoteRendererTimer
 @onready var shader_overlay: ColorRect = %ShaderOverlay
+
+
+const PLUS = preload("res://assets/plus.png")
 
 func _ready() -> void:
 	var root = tree.create_item()
@@ -37,25 +42,44 @@ func _ready() -> void:
 	note_renderer_timer.timeout.connect(_render_text)
 	last_SHA256 = text_edit.text.sha256_text()
 	
+	#region File menu shortcuts
+	var new_file_shortcut: Shortcut = Shortcut.new()
+	var new_file_input_event: InputEventAction = InputEventAction.new()
+	new_file_input_event.action = "new_file"
+	new_file_shortcut.events.append(new_file_input_event)
+	file.set_item_shortcut(0, new_file_shortcut, true)
 	
+	var new_notebook_shortcut: Shortcut = Shortcut.new()
+	var new_notebook_input_event: InputEventAction = InputEventAction.new()
+	new_notebook_input_event.action = "new_notebook"
+	new_notebook_shortcut.events.append(new_notebook_input_event)
+	file.set_item_shortcut(1, new_notebook_shortcut, true)
+	
+	#endregion File menu shortcuts
+	
+	#region View menu shortcuts 
+	## shader shortcut
 	var shader_shortcut: Shortcut = Shortcut.new()
 	var shader_input_event: InputEventAction = InputEventAction.new()
 	shader_input_event.action = "toggle_overlay"
 	shader_shortcut.events.append(shader_input_event)
 	view.set_item_shortcut(0, shader_shortcut, true)
-	var event: InputEventKey = InputMap.action_get_events("toggle_overlay")[0]
-	print(event)
-	print(event.get_keycode_with_modifiers())
-	print(event.get_key_label_with_modifiers())
-	view.set_item_accelerator(0, event.get_keycode_with_modifiers())
-	var minimap_shortcut: Shortcut = Shortcut.new()
-	var minimap_input_event: InputEventAction = InputEventAction.new()
-	minimap_input_event.action = "toggle_minimap"
-	shader_shortcut.events.append(minimap_input_event)
-	view.set_item_shortcut(0, minimap_shortcut, true)
+	
+	## sidebar shortcut
+	var sidebar_shortcut: Shortcut = Shortcut.new()
+	var sidebar_input_event: InputEventAction = InputEventAction.new()
+	sidebar_input_event.action = "toggle_sidebar"
+	sidebar_shortcut.events.append(sidebar_input_event)
+	view.set_item_shortcut(1, sidebar_shortcut, true)
 	
 	
-	#text_edit.grab_focus()
+	#endregion View menu shortcuts 
+	
+	
+	text_edit.grab_focus()
+	
+	var plus_texture: Texture2D = PLUS
+	
 
 
 func _on_tree_column_title_clicked(column: int, _mouse_button_index: int) -> void:
@@ -116,3 +140,16 @@ func _on_view_index_pressed(index: int) -> void:
 		8:
 			text_edit.minimap_draw = !text_edit.minimap_draw
 			view.set_item_checked(8, text_edit.minimap_draw)
+
+
+
+#func _input(event: InputEvent) -> void:
+	#if event.is_action_pressed("toggle_overlay"):
+		#shader_overlay.visible = !shader_overlay.visible
+		#view.set_item_checked(0, shader_overlay.visible)
+
+
+func _on_file_id_pressed(id: int) -> void:
+	match id:
+		0:
+			editor_container.add_child(CodeEdit.new())

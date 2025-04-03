@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://kwxyu2pheane"]
+
+[ext_resource type="Script" uid="uid://bhvhpsexdv0yd" path="res://Scripts/note_editor.gd" id="1_l8n5x"]
+
+[node name="CodeEdit" type="CodeEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "# THIS IS HEADER TEXT
+this is a note taking app:
+- this is some list item
+- this is another item
+- this is item number 3
+[this is a website link to youtube](youtube.com)
+
+## BOTTOM TEXT"
+placeholder_text = "type your notes here c:"
+wrap_mode = 1
+scroll_smooth = true
+minimap_draw = true
+caret_blink = true
+caret_blink_interval = 0.4
+caret_multiple = false
+highlight_current_line = true
+draw_tabs = true
+gutters_draw_bookmarks = true
+gutters_draw_line_numbers = true
+gutters_zero_pad_line_numbers = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+script = ExtResource("1_l8n5x")
